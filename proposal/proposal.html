@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kachua’s Valentine Test 🐢💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #ffb6c1, #ffd1dc);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slide {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  padding: 8vh 6vw;
+  text-align: center;
+}
+
+.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 3rem;
+  color: white;
+}
+
+p {
+  font-size: 1.6rem;
+  color: white;
+  max-width: 900px;
+}
+
+input {
+  padding: 18px;
+  font-size: 1.4rem;
+  border-radius: 40px;
+  border: none;
+  width: 80%;
+  margin-top: 25px;
+  text-align: center;
+}
+
+/* disable autofill visuals */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+
+button {
+  margin-top: 30px;
+  padding: 18px 50px;
+  font-size: 1.4rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  background: #ff4f9a;
+  color: white;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#noBtn {
+  position: absolute;
+}
+
+.hearts {
+  font-size: 3rem;
+  margin-top: 20px;
+}
+</style>
+</head>
+
+<body onload="resetAll()">
+
+<!-- SLIDE 1 -->
+<div class="slide active">
+  <h1>Before Anything 😌</h1>
+  <p><b>What is your LEGAL name?</b></p>
+  <input id="legalName" autocomplete="off">
+  <button onclick="saveLegal()">Continue 💖</button>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide">
+  <h1>Okay Abhishek 😏</h1>
+  <p><b>One thing you LOVE about me?</b></p>
+  <input id="likeMe" autocomplete="off">
+  <button onclick="next()">Next 💕</button>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide">
+  <h1>Risky Question 😈</h1>
+  <p><b>One thing you HATE about me?</b></p>
+  <input id="hateMe" autocomplete="off">
+  <button onclick="checkHate()">Next 👀</button>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide">
+  <h1>Important 💗</h1>
+  <p><b>Are you happy with me?</b></p>
+  <button onclick="next()">YES 🥰</button>
+  <button class="disabled">No 😐</button>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide">
+  <h1>Style Check 🎨</h1>
+  <p><b>What’s your favourite colour?</b></p>
+  <input id="favColor" autocomplete="off">
+  <button onclick="saveColor()">Next 👕</button>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide">
+  <h1>Valentine Intel 💌</h1>
+  <p><b>What do you want as a Valentine’s gift?</b></p>
+  <input id="giftWish" autocomplete="off">
+  <button onclick="saveGift()">Next 💝</button>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="slide">
+  <h1>Future Question 💍</h1>
+  <p><b>Will you spend your life with me?</b></p>
+  <button onclick="next()">Always ❤️</button>
+  <button id="noBtn" onmouseover="moveNo()">No 🙃</button>
+</div>
+
+<!-- SLIDE 8 FINAL -->
+<div class="slide">
+  <h1>Final Question 🐢💖</h1>
+  <p><b>Will you be my Valentine?</b></p>
+  <div class="hearts">💗 💕 💞 💘</div>
+
+  <div style="position:relative; height:150px;">
+    <button onclick="finalYes()">YES BABY 🥰</button><br>
+    <button id="noBtn" style="margin-top:15px;" onmouseover="moveNo()">No 😏</button>
+  </div>
+</div>
+
+<!-- SLIDE 9 -->
+<div class="slide">
+  <h1>I KNEW IT 😭❤️</h1>
+  <p>Kachua 🐢, you’re officially mine forever.</p>
+  <p>Happy Propose Day, my Valentine 💕</p>
+</div>
+
+<!-- SECRET PAGE -->
+<div class="slide" id="secret">
+  <h1>👀 Answers for Anshika Only</h1>
+  <p id="answers"></p>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll(".slide");
+
+/* reset everything */
+function resetAll() {
+  document.querySelectorAll("input").forEach(i => i.value = "");
+  localStorage.clear();
+}
+
+/* navigation */
+function next() {
+  slides[current].classList.remove("active");
+  current++;
+  slides[current].classList.add("active");
+}
+
+/* saves */
+function saveLegal() {
+  localStorage.setItem("legalName", legalName.value);
+  next();
+}
+
+function checkHate() {
+  const v = hateMe.value.toLowerCase();
+  if (v.includes("nothing") || v.includes("no")) next();
+  else alert("💔 WRONG ANSWER.\nThat hurt. Try again.");
+}
+
+function saveColor() {
+  localStorage.setItem("favColor", favColor.value);
+  next();
+}
+
+function saveGift() {
+  localStorage.setItem("giftWish", giftWish.value);
+  next();
+}
+
+/* moving no */
+function moveNo() {
+  const b = document.getElementById("noBtn");
+  b.style.left = Math.random() * 60 + 20 + "%";
+  b.style.top = Math.random() * 40 + "%";
+}
+
+/* CONFETTI */
+function confetti() {
+  for (let i = 0; i < 100; i++) {
+    const c = document.createElement("div");
+    c.innerText = "💖";
+    c.style.position = "fixed";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.top = "-20px";
+    c.style.fontSize = "24px";
+    c.style.animation = "fall 2s linear";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 2000);
+  }
+}
+
+document.head.insertAdjacentHTML("beforeend", `
+<style>
+@keyframes fall {
+  to { transform: translateY(110vh); opacity: 0; }
+}
+</style>
+`);
+
+function finalYes() {
+  confetti();
+  setTimeout(next, 1200);
+}
+
+/* SECRET VIEW */
+window.addEventListener("keydown", e => {
+  if (e.key === "A") {
+    slides[current].classList.remove("active");
+    document.getElementById("secret").classList.add("active");
+    answers.innerHTML = `
+      Legal Name: ${localStorage.getItem("legalName")}<br><br>
+      Favourite Colour: ${localStorage.getItem("favColor")}<br><br>
+      Valentine Gift: ${localStorage.getItem("giftWish")}
+    `;
+  }
+});
+</script>
+
+</body>
+</html>
